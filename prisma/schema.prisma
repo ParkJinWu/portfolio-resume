@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── About ───────────────────────────────────────────────────────────────────
+model About {
+  id          String   @id @default(cuid())
+  name        String
+  title       String
+  bio         String
+  imageUrl    String?  @map("image_url")
+  resumeUrl   String?  @map("resume_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("abouts")
+}
+
+// ─── Experience ──────────────────────────────────────────────────────────────
+model Experience {
+  id          String   @id @default(cuid())
+  company     String
+  position    String
+  startDate   String   @map("start_date")
+  endDate     String?  @map("end_date") // null이면 현재 재직 중
+  description String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("experiences")
+}
+
+// ─── Project ─────────────────────────────────────────────────────────────────
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String?  @map("image_url")
+  siteUrl     String?  @map("site_url")
+  githubUrl   String?  @map("github_url")
+  tags        String[] // 기술 스택 태그
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+// ─── Skill ───────────────────────────────────────────────────────────────────
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String   // e.g. "Frontend", "Backend", "DevOps", "Tool"
+  iconUrl   String?  @map("icon_url")
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("skills")
+}
+
+// ─── Education ───────────────────────────────────────────────────────────────
+model Education {
+  id          String   @id @default(cuid())
+  institution String   // 학교명 또는 자격증 발급 기관
+  degree      String   // 전공/학위 또는 자격증명
+  startDate   String   @map("start_date")
+  endDate     String?  @map("end_date")
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("educations")
+}
+
+// ─── Contact ─────────────────────────────────────────────────────────────────
+model Contact {
+  id        String   @id @default(cuid())
+  type      String   // e.g. "email", "github", "linkedin", "blog"
+  label     String   // 표시용 이름
+  value     String   // URL 또는 이메일 주소
+  order     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("contacts")
+}
