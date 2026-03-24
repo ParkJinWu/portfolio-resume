@@ -66,6 +66,15 @@ npm run lint
 - 커스텀 색상/폰트는 `tailwind.config.ts`의 `theme.extend`에 정의.
 - 반응형은 모바일 퍼스트 (`sm:`, `md:`, `lg:` 순서로 오버라이드).
 
+### 추가 기술 스택
+- **DB:** Neon (PostgreSQL)
+- **ORM:** Prisma
+- **상태관리:** @tanstack/react-query
+- **관리자 순서변경:** @dnd-kit
+- **테마:** next-themes (라이트/다크 토글)
+- **아이콘:** lucide-react
+- 콘텐츠는 DB에서 관리. 컴포넌트 내 하드코딩 금지.
+
 ## Deployment
 
 - **플랫폼:** Vercel
@@ -73,9 +82,33 @@ npm run lint
 - **환경변수:** Vercel 대시보드에서 관리. `.env.local`은 로컬 전용이며 절대 커밋하지 않음.
 - `vercel.json` 수정 시 반드시 사용자에게 확인 후 진행.
 
+## Agent Instructions
+
+각 작업 영역별 상세 규칙은 해당 CLAUDE.md를 참조할 것.
+
+- 프론트엔드 (컴포넌트, 페이지): @components/CLAUDE.md, @app/CLAUDE.md
+- API Route (백엔드): @app/api/CLAUDE.md
+- DB/ORM: @prisma/CLAUDE.md
+
+## Commit Convention
+
+- 형식: `type: 한국어 설명`
+- type 목록:
+  - `feat`: 새 기능/섹션 추가
+  - `style`: 디자인/스타일 변경
+  - `fix`: 버그 수정
+  - `content`: 텍스트/콘텐츠 수정
+  - `refactor`: 코드 리팩토링
+  - `chore`: 설정, MEMORY.md 등 기타
+  - `deploy`: 배포 설정 변경
+- Co-Authored-By 줄 추가 금지.
+- 커밋 메시지는 한국어로 작성.
+
 ## Workflow Rules
 
 - 섹션 작업 완료 시 `/Users/zinu/.claude/projects/-Users-zinu/memory/MEMORY.md`의 해당 체크박스를 `[ ]` → `[x]`로 업데이트할 것.
+- 커밋 메시지: 위 Commit Convention 섹션 참조.
+- 모든 답변은 한국어로 작성할 것.
 
 ## Absolute Prohibitions
 
