@@ -1,43 +1,18 @@
 # 프론트엔드 섹션 구현 계획
 
-## 현황
+## 현황 (2026-03-25 기준)
 
-`components/sections/` 하위 8개 섹션 파일 모두 placeholder 상태.
-`@tanstack/react-query` 미설치, `app/providers.tsx` 파일 없음.
+### 완료된 인프라
+- `@tanstack/react-query` 설치 ✅
+- `app/providers.tsx` 생성 (QueryClientProvider) ✅
+- `app/layout.tsx`에 Providers 적용 ✅
+- `lib/api.ts` — `apiFetch<T>()` 헬퍼 구현 ✅
+- `lib/types.ts` — 전체 타입 정의 (`About`, `Experience`, `Project`, `Skill`, `Education`, `Contact`) ✅
+- `app/api/*/route.ts` — 전체 리소스 CRUD API ✅
+- 관리자 페이지 CRUD UI ✅
 
----
-
-## 사전 작업 (섹션 구현 전)
-
-### 1. react-query 설치
-
-```bash
-npm install @tanstack/react-query
-```
-
-### 2. app/providers.tsx 생성
-
-`QueryClientProvider`를 래핑하는 클라이언트 컴포넌트:
-
-```ts
-'use client'
-// QueryClient 인스턴스 생성
-// QueryClientProvider로 children 감싸기
-// next-themes의 ThemeProvider도 함께 통합
-// (현재 ThemeToggle.tsx가 localStorage 직접 조작 방식 → next-themes로 교체 예정)
-```
-
-### 3. app/layout.tsx 수정
-
-`<body>` 내부를 `<Providers>`로 감싸기:
-
-```tsx
-<body>
-  <Providers>
-    {children}
-  </Providers>
-</body>
-```
+### 남은 작업
+`components/sections/` 하위 섹션 파일들이 모두 정적 placeholder 상태. API 연동 필요.
 
 ---
 
@@ -211,9 +186,9 @@ if (!data || data.length === 0) {
 
 ## 구현 후 체크리스트
 
-- [ ] `@tanstack/react-query` 설치
-- [ ] `app/providers.tsx` 생성 (QueryClientProvider)
-- [ ] `app/layout.tsx`에 Providers 적용
+- [x] `@tanstack/react-query` 설치
+- [x] `app/providers.tsx` 생성 (QueryClientProvider)
+- [x] `app/layout.tsx`에 Providers 적용
 - [ ] Hero 섹션 구현 및 /api/about 연결
 - [ ] About 섹션 구현 (캐시 공유)
 - [ ] Experience 섹션 구현

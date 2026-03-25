@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/auth-guard'
 import { NextRequest } from 'next/server'
 
 // GET /api/projects
@@ -15,6 +16,8 @@ export async function GET() {
 
 // POST /api/projects
 export async function POST(req: NextRequest) {
+  const authError = await requireAuth()
+  if (authError) return authError
   try {
     const body = await req.json()
     const { title, description, imageUrl, siteUrl, githubUrl, tags, order } = body
@@ -45,6 +48,8 @@ export async function POST(req: NextRequest) {
 
 // PUT /api/projects?id=xxx
 export async function PUT(req: NextRequest) {
+  const authError = await requireAuth()
+  if (authError) return authError
   try {
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
@@ -67,6 +72,8 @@ export async function PUT(req: NextRequest) {
 
 // DELETE /api/projects?id=xxx
 export async function DELETE(req: NextRequest) {
+  const authError = await requireAuth()
+  if (authError) return authError
   try {
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
