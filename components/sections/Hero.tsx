@@ -21,11 +21,19 @@ export default function Hero() {
 
       {isLoading ? (
         <>
+          <div className="h-24 w-24 bg-muted/20 rounded-full animate-pulse mb-6" />
           <div className="h-10 w-64 bg-muted/20 rounded animate-pulse mb-3" />
           <div className="h-6 w-96 bg-muted/20 rounded animate-pulse mb-8" />
         </>
       ) : (
         <>
+          {data?.imageUrl && (
+            <img
+              src={data.imageUrl}
+              alt={data.name ?? 'Profile'}
+              className="w-24 h-24 rounded-full object-cover mb-6"
+            />
+          )}
           <h1 className="text-4xl font-semibold tracking-tight text-foreground mb-3">
             {data?.name ?? 'Name Placeholder'}
           </h1>

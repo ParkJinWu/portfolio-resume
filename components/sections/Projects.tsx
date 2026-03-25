@@ -46,6 +46,13 @@ export default function Projects() {
       <div className="space-y-10">
         {data.map((project) => (
           <div key={project.id}>
+            {project.imageUrl && (
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="w-full h-48 object-cover rounded-lg mb-4"
+              />
+            )}
             <div className="flex items-center gap-3 mb-2">
               <h3 className="text-foreground font-medium">{project.title}</h3>
               {project.siteUrl && (

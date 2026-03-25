@@ -53,8 +53,15 @@ export default function Skills() {
               {skills.map((skill) => (
                 <span
                   key={skill.id}
-                  className="px-3 py-1 text-sm rounded-full border border-border text-muted"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 text-sm rounded-full border border-border text-muted"
                 >
+                  {skill.iconUrl && (
+                    <img
+                      src={skill.iconUrl}
+                      alt={skill.name}
+                      className="w-4 h-4 object-contain"
+                    />
+                  )}
                   {skill.name}
                 </span>
               ))}
