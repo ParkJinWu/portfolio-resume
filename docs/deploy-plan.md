@@ -20,7 +20,7 @@ Vercel 대시보드 → Project Settings → Environment Variables에서 설정.
 |--------|------|--------------|
 | `DATABASE_URL` | Neon pooled connection (런타임용) | Neon 콘솔 → Connection Details → Pooled connection |
 | `DIRECT_URL` | Neon direct connection (마이그레이션용) | Neon 콘솔 → Connection Details → Direct connection |
-| `NEXTAUTH_SECRET` | NextAuth JWT 서명 키 | `openssl rand -base64 32` 실행 결과 |
+| `AUTH_SECRET` | NextAuth JWT 서명 키 | `openssl rand -base64 32` 실행 결과 |
 | `ADMIN_EMAIL` | 관리자 로그인 이메일 | 직접 지정 |
 | `ADMIN_PASSWORD` | 관리자 로그인 비밀번호 | 직접 지정 (충분히 강력하게) |
 
@@ -58,7 +58,7 @@ vercel link
 # 환경변수 추가
 vercel env add DATABASE_URL production
 vercel env add DIRECT_URL production
-vercel env add NEXTAUTH_SECRET production
+vercel env add AUTH_SECRET production
 vercel env add ADMIN_EMAIL production
 vercel env add ADMIN_PASSWORD production
 
