@@ -6,7 +6,7 @@
    - `git diff HEAD`와 `git status`로 이번 작업에서 변경된 파일 목록 확인
    - 변경 내용을 분석해 어떤 기능/작업이 완료됐는지 파악
 
-2. **MEMORY.md 업데이트** (`/Users/zinu/Dev/portfolio-resume/MEMORY.md`)
+2. **MEMORY.md 업데이트** (`/Users/zinu/.claude/projects/-Users-zinu-Dev-portfolio-resume/memory/MEMORY.md`)
    - 완료된 작업 항목의 체크박스를 `[ ]` → `[x]`로 변경
    - 미결 사항(## 미결 사항) 최신화: 완료된 항목은 ~~취소선~~ 처리, 새로 발생한 미결 사항 추가
    - 다음 작업(## 다음 작업) 섹션이 없으면 추가하고, 있으면 갱신: 현재 상태 기준으로 바로 다음에 해야 할 작업 명시

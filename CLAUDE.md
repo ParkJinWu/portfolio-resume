@@ -106,7 +106,7 @@ npm run lint
 
 ## Workflow Rules
 
-- 섹션 작업 완료 시 `/Users/zinu/.claude/projects/-Users-zinu/memory/MEMORY.md`의 해당 체크박스를 `[ ]` → `[x]`로 업데이트할 것.
+- 섹션 작업 완료 시 `/Users/zinu/.claude/projects/-Users-zinu-Dev-portfolio-resume/memory/MEMORY.md`의 해당 체크박스를 `[ ]` → `[x]`로 업데이트할 것.
 - 커밋 메시지: 위 Commit Convention 섹션 참조.
 - 모든 답변은 한국어로 작성할 것.
 
