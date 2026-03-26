@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { ImageUpload } from '@/components/admin/ImageUpload'
 
 export interface AboutFormData {
   name: string
@@ -17,7 +18,7 @@ interface AboutFormProps {
 }
 
 export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm<AboutFormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<AboutFormData>({
     defaultValues: {
       name: defaultValues?.name ?? '',
       title: defaultValues?.title ?? '',
@@ -60,14 +61,12 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
         {errors.bio && <p className="mt-1 text-xs text-red-500">{errors.bio.message}</p>}
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium text-foreground">프로필 이미지 URL</label>
-        <input
-          {...register('imageUrl')}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/20"
-          placeholder="https://example.com/photo.jpg"
-        />
-      </div>
+      <ImageUpload
+        value={watch('imageUrl')}
+        onChange={(url) => setValue('imageUrl', url)}
+        label="프로필 이미지"
+        placeholder="https://example.com/photo.jpg"
+      />
 
       <div>
         <label className="mb-1 block text-sm font-medium text-foreground">이력서 URL</label>

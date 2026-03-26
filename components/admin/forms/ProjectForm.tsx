@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { ImageUpload } from '@/components/admin/ImageUpload'
 
 interface ProjectFormData {
   title: string
@@ -31,7 +32,7 @@ export function ProjectForm({ defaultValues, onSubmit, isPending }: ProjectFormP
     ? defaultValues.tags.join(', ')
     : (defaultValues?.tags ?? '')
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ProjectFormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ProjectFormData>({
     defaultValues: {
       title: defaultValues?.title ?? '',
       description: defaultValues?.description ?? '',
@@ -75,14 +76,12 @@ export function ProjectForm({ defaultValues, onSubmit, isPending }: ProjectFormP
         {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium text-foreground">이미지 URL</label>
-        <input
-          {...register('imageUrl')}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/20"
-          placeholder="https://example.com/image.jpg"
-        />
-      </div>
+      <ImageUpload
+        value={watch('imageUrl')}
+        onChange={(url) => setValue('imageUrl', url)}
+        label="프로젝트 이미지"
+        placeholder="https://example.com/image.jpg"
+      />
 
       <div className="grid grid-cols-2 gap-4">
         <div>

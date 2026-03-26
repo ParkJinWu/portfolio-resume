@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { ImageUpload } from '@/components/admin/ImageUpload'
 
 export interface SkillFormData {
   name: string
@@ -17,7 +18,7 @@ interface SkillFormProps {
 const CATEGORIES = ['Frontend', 'Backend', 'DevOps', 'Tool', 'Database', 'Language']
 
 export function SkillForm({ defaultValues, onSubmit, isPending }: SkillFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm<SkillFormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<SkillFormData>({
     defaultValues: {
       name: defaultValues?.name ?? '',
       category: defaultValues?.category ?? '',
@@ -53,14 +54,12 @@ export function SkillForm({ defaultValues, onSubmit, isPending }: SkillFormProps
         {errors.category && <p className="mt-1 text-xs text-red-500">{errors.category.message}</p>}
       </div>
 
-      <div>
-        <label className="mb-1 block text-sm font-medium text-foreground">아이콘 URL</label>
-        <input
-          {...register('iconUrl')}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/20"
-          placeholder="https://example.com/icon.svg"
-        />
-      </div>
+      <ImageUpload
+        value={watch('iconUrl')}
+        onChange={(url) => setValue('iconUrl', url)}
+        label="아이콘"
+        placeholder="https://example.com/icon.svg"
+      />
 
       <button
         type="submit"
