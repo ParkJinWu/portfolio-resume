@@ -59,7 +59,7 @@ export default function Skills() {
                     <img
                       src={skill.iconUrl}
                       alt={skill.name}
-                      className="w-4 h-4 object-contain"
+                      className="w-8 h-8 object-contain"
                     />
                   )}
                   {skill.name}
