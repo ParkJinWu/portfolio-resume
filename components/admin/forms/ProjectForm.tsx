@@ -165,7 +165,7 @@ export function ProjectForm({ defaultValues, onSubmit, isPending }: ProjectFormP
           {...register('achievements')}
           rows={4}
           className={`${inputClass} resize-y`}
-          placeholder={"AI 에이전트 팀(PM/FE/BE/UI·UX) 협업\n공개 포트폴리오 페이지 구현\n(줄바꿈으로 구분)"}
+          placeholder="줄바꿈으로 구분"
         />
       </div>
 

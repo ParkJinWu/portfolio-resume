@@ -28,7 +28,7 @@ export function FormModal({ open, onClose, title, children }: FormModalProps) {
       <div
         role="dialog"
         aria-modal="true"
-        className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-lg"
+        className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-background p-6 shadow-lg"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">{title}</h2>
