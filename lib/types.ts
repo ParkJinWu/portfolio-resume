@@ -29,6 +29,9 @@ export interface Project {
   siteUrl: string | null
   githubUrl: string | null
   tags: string[]
+  startDate: string | null
+  endDate: string | null
+  achievements: string[]
   order: number
   createdAt: string
   updatedAt: string

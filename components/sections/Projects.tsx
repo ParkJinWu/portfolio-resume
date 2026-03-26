@@ -45,50 +45,92 @@ export default function Projects() {
       </p>
       <div className="space-y-10">
         {data.map((project) => (
-          <div key={project.id}>
-            {project.imageUrl && (
-              <img
-                src={project.imageUrl}
-                alt={project.title}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-            )}
-            <div className="flex items-center gap-3 mb-2">
-              <h3 className="text-foreground font-medium">{project.title}</h3>
-              {project.siteUrl && (
-                <a
-                  href={project.siteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted hover:text-foreground transition-colors"
-                >
-                  <ExternalLink size={14} />
-                </a>
-              )}
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted hover:text-foreground transition-colors"
-                >
-                  <GitFork size={14} />
-                </a>
+          <div
+            key={project.id}
+            className="rounded-xl border border-border bg-background p-6"
+          >
+            {/* 제목 + 기간 */}
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <h3 className="text-foreground font-semibold text-lg">
+                {project.title}
+              </h3>
+              {(project.startDate || project.endDate) && (
+                <span className="text-sm text-muted whitespace-nowrap">
+                  {project.startDate}{project.endDate ? ` ~ ${project.endDate}` : ''}
+                </span>
               )}
             </div>
-            <p className="text-sm text-muted/80 whitespace-pre-line leading-relaxed mb-3">
+
+            {/* GitHub / Demo 링크 */}
+            {(project.githubUrl || project.siteUrl) && (
+              <div className="flex gap-2 mb-4">
+                {project.githubUrl && (
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted hover:text-foreground hover:border-foreground/30 transition-colors"
+                  >
+                    <GitFork size={13} />
+                    GitHub
+                  </a>
+                )}
+                {project.siteUrl && (
+                  <a
+                    href={project.siteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-muted hover:text-foreground hover:border-foreground/30 transition-colors"
+                  >
+                    Demo
+                    <ExternalLink size={12} />
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* 설명 */}
+            <p className="text-sm text-muted/80 whitespace-pre-line leading-relaxed mb-5">
               {project.description}
             </p>
+
+            {/* 기술 스택 */}
             {project.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 text-xs rounded-full border border-border text-muted"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div className="mb-5">
+                <h4 className="text-sm font-semibold text-foreground mb-2">
+                  기술 스택
+                </h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-xs rounded-full bg-muted/10 border border-border text-muted"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 주요 성과 */}
+            {project.achievements.length > 0 && (
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-3">
+                  주요 성과
+                </h4>
+                <ol className="space-y-2">
+                  {project.achievements.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center mt-0.5">
+                        {idx + 1}
+                      </span>
+                      <span className="text-sm text-muted/80 leading-relaxed">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
               </div>
             )}
           </div>

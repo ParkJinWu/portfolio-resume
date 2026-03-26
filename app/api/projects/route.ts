@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   if (authError) return authError
   try {
     const body = await req.json()
-    const { title, description, imageUrl, siteUrl, githubUrl, tags, order } = body
+    const { title, description, imageUrl, siteUrl, githubUrl, tags, startDate, endDate, achievements, order } = body
 
     if (!title || !description) {
       return Response.json(
@@ -37,6 +37,9 @@ export async function POST(req: NextRequest) {
         siteUrl,
         githubUrl,
         tags: tags ?? [],
+        startDate,
+        endDate,
+        achievements: achievements ?? [],
         order: order ?? 0,
       },
     })
@@ -58,11 +61,11 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { title, description, imageUrl, siteUrl, githubUrl, tags, order } = body
+    const { title, description, imageUrl, siteUrl, githubUrl, tags, startDate, endDate, achievements, order } = body
 
     const project = await prisma.project.update({
       where: { id },
-      data: { title, description, imageUrl, siteUrl, githubUrl, tags, order },
+      data: { title, description, imageUrl, siteUrl, githubUrl, tags, startDate, endDate, achievements, order },
     })
     return Response.json({ data: project }, { status: 200 })
   } catch {
