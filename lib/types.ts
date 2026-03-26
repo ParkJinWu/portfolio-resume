@@ -5,6 +5,7 @@ export interface About {
   bio: string
   imageUrl: string | null
   images: string[]
+  imagePositions: Record<string, { x: number; y: number }> | null
   resumeUrl: string | null
   createdAt: string
   updatedAt: string

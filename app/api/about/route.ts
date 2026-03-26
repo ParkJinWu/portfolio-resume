@@ -18,14 +18,14 @@ export async function POST(req: NextRequest) {
   if (authError) return authError
   try {
     const body = await req.json()
-    const { name, title, bio, imageUrl, images, resumeUrl } = body
+    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl } = body
 
     if (!name || !title || !bio) {
       return Response.json({ error: 'name, title, bio는 필수입니다', status: 400 }, { status: 400 })
     }
 
     const about = await prisma.about.create({
-      data: { name, title, bio, imageUrl, images: images ?? [], resumeUrl },
+      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl },
     })
     return Response.json({ data: about }, { status: 201 })
   } catch {
@@ -45,14 +45,15 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { name, title, bio, imageUrl, images, resumeUrl } = body
+    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl } = body
 
     const about = await prisma.about.update({
       where: { id },
-      data: { name, title, bio, imageUrl, images: images ?? [], resumeUrl },
+      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl },
     })
     return Response.json({ data: about }, { status: 200 })
-  } catch {
+  } catch (error) {
+    console.error('About PUT error:', error)
     return Response.json({ error: '데이터 수정 실패', status: 500 }, { status: 500 })
   }
 }

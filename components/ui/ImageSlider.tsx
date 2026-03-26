@@ -5,10 +5,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ImageSliderProps {
   images: string[]
+  positions?: Record<string, { x: number; y: number }> | null
   alt?: string
 }
 
-export function ImageSlider({ images, alt = 'Profile' }: ImageSliderProps) {
+export function ImageSlider({ images, positions, alt = 'Profile' }: ImageSliderProps) {
   const [current, setCurrent] = useState(0)
 
   if (images.length === 0) return null
@@ -17,6 +18,9 @@ export function ImageSlider({ images, alt = 'Profile' }: ImageSliderProps) {
   const next = () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1))
   const multi = images.length > 1
 
+  const pos = positions?.[String(current)]
+  const objectPosition = pos ? `${pos.x}% ${pos.y}%` : '50% 50%'
+
   return (
     <div className="relative flex flex-col items-center">
       <div className="relative w-48 h-48 rounded-full overflow-hidden">
@@ -24,6 +28,7 @@ export function ImageSlider({ images, alt = 'Profile' }: ImageSliderProps) {
           src={images[current]}
           alt={`${alt} ${current + 1}`}
           className="w-full h-full object-cover transition-opacity duration-300"
+          style={{ objectPosition }}
         />
         {multi && (
           <>

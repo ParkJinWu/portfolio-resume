@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ImageUpload } from '@/components/admin/ImageUpload'
+import { FocalPointPicker } from '@/components/admin/FocalPointPicker'
 import { X } from 'lucide-react'
 
 export interface AboutFormData {
@@ -11,6 +12,7 @@ export interface AboutFormData {
   bio: string
   imageUrl: string
   images: string[]
+  imagePositions: Record<string, { x: number; y: number }>
   resumeUrl: string
 }
 
@@ -22,6 +24,9 @@ interface AboutFormProps {
 
 export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps) {
   const [images, setImages] = useState<string[]>(defaultValues?.images ?? [])
+  const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>(
+    (defaultValues?.imagePositions as Record<string, { x: number; y: number }>) ?? {},
+  )
   const [newImageUrl, setNewImageUrl] = useState('')
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<AboutFormData>({
@@ -31,6 +36,7 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
       bio: defaultValues?.bio ?? '',
       imageUrl: defaultValues?.imageUrl ?? '',
       images: defaultValues?.images ?? [],
+      imagePositions: (defaultValues?.imagePositions as Record<string, { x: number; y: number }>) ?? {},
       resumeUrl: defaultValues?.resumeUrl ?? '',
     },
   })
@@ -40,6 +46,10 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
     const updated = [...images, url]
     setImages(updated)
     setValue('images', updated)
+    // Set default center position for new image
+    const newPositions = { ...positions, [String(updated.length - 1)]: { x: 50, y: 50 } }
+    setPositions(newPositions)
+    setValue('imagePositions', newPositions)
     setNewImageUrl('')
   }
 
@@ -47,6 +57,20 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
     const updated = images.filter((_, i) => i !== index)
     setImages(updated)
     setValue('images', updated)
+    // Reindex positions
+    const newPositions: Record<string, { x: number; y: number }> = {}
+    updated.forEach((_, i) => {
+      const oldIndex = i >= index ? i + 1 : i
+      newPositions[String(i)] = positions[String(oldIndex)] ?? { x: 50, y: 50 }
+    })
+    setPositions(newPositions)
+    setValue('imagePositions', newPositions)
+  }
+
+  const handlePositionChange = (index: number, x: number, y: number) => {
+    const newPositions = { ...positions, [String(index)]: { x, y } }
+    setPositions(newPositions)
+    setValue('imagePositions', newPositions)
   }
 
   return (
@@ -82,34 +106,32 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
         {errors.bio && <p className="mt-1 text-xs text-red-500">{errors.bio.message}</p>}
       </div>
 
-      <ImageUpload
-        value={watch('imageUrl')}
-        onChange={(url) => setValue('imageUrl', url)}
-        label="대표 프로필 이미지"
-        placeholder="https://example.com/photo.jpg"
-      />
-
       {/* 슬라이더 이미지 목록 */}
       <div>
         <label className="mb-1 block text-sm font-medium text-foreground">
           슬라이더 이미지 ({images.length}장)
         </label>
         {images.length > 0 && (
-          <div className="mb-2 flex flex-wrap gap-2">
+          <div className="mb-2 space-y-3">
             {images.map((url, i) => (
-              <div key={i} className="relative">
-                <img
+              <div key={i} className="rounded-lg border border-border p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs text-muted">이미지 {i + 1}</p>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(i)}
+                    className="flex items-center gap-1 text-xs text-red-500 hover:text-red-600"
+                  >
+                    <X size={12} />
+                    삭제
+                  </button>
+                </div>
+                <FocalPointPicker
                   src={url}
-                  alt={`슬라이더 ${i + 1}`}
-                  className="h-16 w-16 rounded-lg border border-border object-cover"
+                  x={positions[String(i)]?.x ?? 50}
+                  y={positions[String(i)]?.y ?? 50}
+                  onChange={(x, y) => handlePositionChange(i, x, y)}
                 />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(i)}
-                  className="absolute -right-1.5 -top-1.5 rounded-full bg-red-500 p-0.5 text-white hover:bg-red-600"
-                >
-                  <X size={12} />
-                </button>
               </div>
             ))}
           </div>

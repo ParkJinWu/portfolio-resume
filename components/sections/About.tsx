@@ -80,7 +80,7 @@ export default function About() {
       <div className="flex flex-col md:flex-row gap-8 md:gap-12">
         {/* 왼쪽: 프로필 이미지 + 연락처 */}
         <div className="flex flex-col items-center shrink-0 md:w-56">
-          <ImageSlider images={effectiveImages} alt={about.name} />
+          <ImageSlider images={effectiveImages} positions={about.imagePositions} alt={about.name} />
 
           {contacts && contacts.length > 0 && (
             <div className="mt-6 w-full space-y-2">
