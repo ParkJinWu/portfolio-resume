@@ -1,13 +1,16 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ImageUpload } from '@/components/admin/ImageUpload'
+import { X } from 'lucide-react'
 
 export interface AboutFormData {
   name: string
   title: string
   bio: string
   imageUrl: string
+  images: string[]
   resumeUrl: string
 }
 
@@ -18,15 +21,33 @@ interface AboutFormProps {
 }
 
 export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps) {
+  const [images, setImages] = useState<string[]>(defaultValues?.images ?? [])
+  const [newImageUrl, setNewImageUrl] = useState('')
+
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<AboutFormData>({
     defaultValues: {
       name: defaultValues?.name ?? '',
       title: defaultValues?.title ?? '',
       bio: defaultValues?.bio ?? '',
       imageUrl: defaultValues?.imageUrl ?? '',
+      images: defaultValues?.images ?? [],
       resumeUrl: defaultValues?.resumeUrl ?? '',
     },
   })
+
+  const handleAddImage = (url: string) => {
+    if (!url) return
+    const updated = [...images, url]
+    setImages(updated)
+    setValue('images', updated)
+    setNewImageUrl('')
+  }
+
+  const handleRemoveImage = (index: number) => {
+    const updated = images.filter((_, i) => i !== index)
+    setImages(updated)
+    setValue('images', updated)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -64,9 +85,42 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
       <ImageUpload
         value={watch('imageUrl')}
         onChange={(url) => setValue('imageUrl', url)}
-        label="프로필 이미지"
+        label="대표 프로필 이미지"
         placeholder="https://example.com/photo.jpg"
       />
+
+      {/* 슬라이더 이미지 목록 */}
+      <div>
+        <label className="mb-1 block text-sm font-medium text-foreground">
+          슬라이더 이미지 ({images.length}장)
+        </label>
+        {images.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-2">
+            {images.map((url, i) => (
+              <div key={i} className="relative">
+                <img
+                  src={url}
+                  alt={`슬라이더 ${i + 1}`}
+                  className="h-16 w-16 rounded-lg border border-border object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(i)}
+                  className="absolute -right-1.5 -top-1.5 rounded-full bg-red-500 p-0.5 text-white hover:bg-red-600"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <ImageUpload
+          value={newImageUrl}
+          onChange={handleAddImage}
+          label="이미지 추가"
+          placeholder="https://example.com/photo.jpg"
+        />
+      </div>
 
       <div>
         <label className="mb-1 block text-sm font-medium text-foreground">이력서 URL</label>

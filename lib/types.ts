@@ -4,6 +4,7 @@ export interface About {
   title: string
   bio: string
   imageUrl: string | null
+  images: string[]
   resumeUrl: string | null
   createdAt: string
   updatedAt: string

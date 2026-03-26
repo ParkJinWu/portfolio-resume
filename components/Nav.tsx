@@ -6,7 +6,6 @@ const navItems = [
   "Skills",
   "Projects",
   "Education",
-  "Contact",
 ];
 
 export default function Nav() {
