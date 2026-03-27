@@ -24,7 +24,7 @@ export function Hero() {
     <span className="inline-flex items-center bg-[#e8735a] rounded-xl px-5 py-2 sm:px-6 sm:py-3">
       <TextRotate
         texts={rotatingTexts}
-        rotationInterval={3000}
+        rotationInterval={(data?.rolesInterval ?? 3) * 1000}
         splitBy="characters"
         staggerDuration={0.03}
         staggerFrom="first"

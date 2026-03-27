@@ -17,6 +17,7 @@ model About {
   imageUrl    String?  @map("image_url")
   roles           String[] @default([])
   rolesPosition   String   @default("before") @map("roles_position")
+  rolesInterval   Int      @default(3) @map("roles_interval")
   images          String[] @default([])
   imagePositions  Json?    @default("{}") @map("image_positions")
   resumeUrl       String?  @map("resume_url")

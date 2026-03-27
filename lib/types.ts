@@ -5,6 +5,7 @@ export interface About {
   bio: string
   roles: string[]
   rolesPosition: string
+  rolesInterval: number
   imageUrl: string | null
   images: string[]
   imagePositions: Record<string, { x: number; y: number }> | null

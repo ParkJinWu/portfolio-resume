@@ -12,6 +12,7 @@ export interface AboutFormData {
   bio: string
   roles: string[]
   rolesPosition: string
+  rolesInterval: number
   imageUrl: string
   images: string[]
   imagePositions: Record<string, { x: number; y: number }>
@@ -40,6 +41,7 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
       bio: defaultValues?.bio ?? '',
       roles: defaultValues?.roles ?? [],
       rolesPosition: defaultValues?.rolesPosition ?? 'before',
+      rolesInterval: defaultValues?.rolesInterval ?? 3,
       imageUrl: defaultValues?.imageUrl ?? '',
       images: defaultValues?.images ?? [],
       imagePositions: (defaultValues?.imagePositions as Record<string, { x: number; y: number }>) ?? {},
@@ -188,6 +190,16 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
               뒤 (고정 + 로테이션)
             </button>
           </div>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-xs font-medium text-muted">로테이션 간격 (초)</label>
+          <input
+            type="number"
+            min={1}
+            max={10}
+            {...register('rolesInterval', { valueAsNumber: true, min: 1, max: 10 })}
+            className="w-24 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          />
         </div>
       </div>
 
