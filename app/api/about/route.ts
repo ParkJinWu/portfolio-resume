@@ -18,14 +18,14 @@ export async function POST(req: NextRequest) {
   if (authError) return authError
   try {
     const body = await req.json()
-    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl } = body
+    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl, roles, rolesPosition } = body
 
     if (!name || !title || !bio) {
       return Response.json({ error: 'name, title, bio는 필수입니다', status: 400 }, { status: 400 })
     }
 
     const about = await prisma.about.create({
-      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl },
+      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl, roles: roles ?? [], rolesPosition: rolesPosition ?? 'before' },
     })
     return Response.json({ data: about }, { status: 201 })
   } catch {
@@ -45,11 +45,11 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl } = body
+    const { name, title, bio, imageUrl, images, imagePositions, resumeUrl, roles, rolesPosition } = body
 
     const about = await prisma.about.update({
       where: { id },
-      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl },
+      data: { name, title, bio, imageUrl, images: images ?? [], imagePositions: imagePositions ?? {}, resumeUrl, roles: roles ?? [], rolesPosition: rolesPosition ?? 'before' },
     })
     return Response.json({ data: about }, { status: 200 })
   } catch (error) {

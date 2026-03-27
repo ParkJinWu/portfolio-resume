@@ -3,6 +3,8 @@ export interface About {
   name: string
   title: string
   bio: string
+  roles: string[]
+  rolesPosition: string
   imageUrl: string | null
   images: string[]
   imagePositions: Record<string, { x: number; y: number }> | null

@@ -10,6 +10,8 @@ export interface AboutFormData {
   name: string
   title: string
   bio: string
+  roles: string[]
+  rolesPosition: string
   imageUrl: string
   images: string[]
   imagePositions: Record<string, { x: number; y: number }>
@@ -23,6 +25,8 @@ interface AboutFormProps {
 }
 
 export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps) {
+  const [roles, setRoles] = useState<string[]>(defaultValues?.roles ?? [])
+  const [newRole, setNewRole] = useState('')
   const [images, setImages] = useState<string[]>(defaultValues?.images ?? [])
   const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>(
     (defaultValues?.imagePositions as Record<string, { x: number; y: number }>) ?? {},
@@ -34,6 +38,8 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
       name: defaultValues?.name ?? '',
       title: defaultValues?.title ?? '',
       bio: defaultValues?.bio ?? '',
+      roles: defaultValues?.roles ?? [],
+      rolesPosition: defaultValues?.rolesPosition ?? 'before',
       imageUrl: defaultValues?.imageUrl ?? '',
       images: defaultValues?.images ?? [],
       imagePositions: (defaultValues?.imagePositions as Record<string, { x: number; y: number }>) ?? {},
@@ -93,6 +99,96 @@ export function AboutForm({ defaultValues, onSubmit, isPending }: AboutFormProps
           placeholder="프론트엔드 개발자"
         />
         {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title.message}</p>}
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-foreground">
+          역할 로테이션 ({roles.length}개)
+        </label>
+        <p className="mb-2 text-xs text-muted">히어로 섹션에서 순환 표시될 역할/직함</p>
+        {roles.length > 0 && (
+          <div className="mb-2 flex flex-wrap gap-2">
+            {roles.map((role, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 rounded-full bg-muted/20 px-3 py-1 text-sm text-foreground"
+              >
+                {role}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = roles.filter((_, idx) => idx !== i)
+                    setRoles(updated)
+                    setValue('roles', updated)
+                  }}
+                  className="ml-1 text-muted hover:text-foreground"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="flex gap-2">
+          <input
+            value={newRole}
+            onChange={(e) => setNewRole(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                if (newRole.trim()) {
+                  const updated = [...roles, newRole.trim()]
+                  setRoles(updated)
+                  setValue('roles', updated)
+                  setNewRole('')
+                }
+              }
+            }}
+            className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/20"
+            placeholder="Frontend Developer"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (newRole.trim()) {
+                const updated = [...roles, newRole.trim()]
+                setRoles(updated)
+                setValue('roles', updated)
+                setNewRole('')
+              }
+            }}
+            className="rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted/10"
+          >
+            추가
+          </button>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-xs font-medium text-muted">로테이션 위치</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setValue('rolesPosition', 'before')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                watch('rolesPosition') === 'before'
+                  ? 'bg-foreground text-background'
+                  : 'border border-border text-foreground hover:bg-muted/10'
+              }`}
+            >
+              앞 (로테이션 + 고정)
+            </button>
+            <button
+              type="button"
+              onClick={() => setValue('rolesPosition', 'after')}
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                watch('rolesPosition') === 'after'
+                  ? 'bg-foreground text-background'
+                  : 'border border-border text-foreground hover:bg-muted/10'
+              }`}
+            >
+              뒤 (고정 + 로테이션)
+            </button>
+          </div>
+        </div>
       </div>
 
       <div>
