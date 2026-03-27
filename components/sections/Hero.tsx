@@ -44,13 +44,19 @@ export function Hero() {
       id="hero"
       className="relative min-h-[calc(100vh-3.5rem)] flex flex-col justify-center items-center px-6 border-b border-dashed border-border"
     >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute top-[-30%] right-[-15%] h-[70%] w-[55%] rounded-full bg-[#f0c8a0] opacity-50 blur-[120px] dark:opacity-25" />
+        <div className="absolute bottom-[-30%] left-[-15%] h-[70%] w-[55%] rounded-full bg-[#a0c4f0] opacity-50 blur-[120px] dark:opacity-25" />
+        <div className="hero-grid-ring absolute inset-0 bg-grid" />
+      </div>
+
       {isLoading ? (
-        <div className="flex items-center gap-4">
+        <div className="relative z-10 flex items-center gap-4">
           <div className="h-14 w-48 bg-muted/20 rounded animate-pulse" />
           <div className="h-14 w-36 bg-muted/20 rounded-xl animate-pulse" />
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-8">
+        <div className="relative z-10 flex flex-col items-center gap-8">
           <h1 className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
             {isBefore ? (
               <>
@@ -84,7 +90,7 @@ export function Hero() {
 
       <a
         href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted animate-bounce"
+        className="relative z-10 absolute bottom-8 left-1/2 -translate-x-1/2 text-muted animate-bounce"
         aria-label="Scroll down"
       >
         <ChevronDown size={24} />

@@ -7,6 +7,7 @@
   --foreground: #121212;
   --muted: #6b6b6b;
   --accent: #121212;
+  --grid-color: rgba(0, 0, 0, 0.06);
 }
 
 .dark {
@@ -16,6 +17,7 @@
   --foreground: #e8e8e8;
   --muted: #888888;
   --accent: #e8e8e8;
+  --grid-color: rgba(255, 255, 255, 0.06);
 }
 
 @theme inline {
@@ -33,4 +35,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.hero-grid-ring {
+  mask-image: radial-gradient(ellipse at center, transparent 20%, black 40%, black 60%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black 40%, black 60%, transparent 80%);
 }
