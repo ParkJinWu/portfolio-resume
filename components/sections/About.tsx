@@ -40,7 +40,7 @@ export default function About() {
         </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-12">
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-48 h-48 rounded-full bg-muted/20 animate-pulse" />
+            <div className="w-64 h-64 rounded-full bg-muted/20 animate-pulse" />
             <div className="mt-6 w-full space-y-2">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-14 w-full bg-muted/20 rounded-lg animate-pulse" />
@@ -79,7 +79,7 @@ export default function About() {
 
       <div className="flex flex-col md:flex-row gap-8 md:gap-12">
         {/* 왼쪽: 프로필 이미지 + 연락처 */}
-        <div className="flex flex-col items-center shrink-0 md:w-56">
+        <div className="flex flex-col items-center shrink-0 md:w-80">
           <ImageSlider images={effectiveImages} positions={about.imagePositions} alt={about.name} />
 
           {contacts && contacts.length > 0 && (
