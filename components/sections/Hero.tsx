@@ -42,7 +42,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[calc(100vh-3.5rem)] flex flex-col justify-center items-center px-6 border-b border-dashed border-border"
+      className="relative min-h-screen flex flex-col justify-center items-center px-6 border-b border-dashed border-border"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute top-[-30%] right-[-15%] h-[70%] w-[55%] rounded-full bg-[#f0c8a0] opacity-50 blur-[120px] dark:opacity-25" />
@@ -71,26 +71,18 @@ export function Hero() {
             )}
           </h1>
 
-          <div className="flex gap-3">
-            <a
-              href="#projects"
-              className="px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full transition-opacity hover:opacity-90"
-            >
-              Projects
-            </a>
-            <a
-              href="#about"
-              className="px-5 py-2.5 border border-border text-sm font-medium rounded-full text-foreground transition-colors hover:bg-muted/10"
-            >
-              About Me
-            </a>
-          </div>
+          <a
+            href="#about"
+            className="px-5 py-2.5 border border-border text-sm font-medium rounded-full text-foreground transition-colors hover:bg-muted/10"
+          >
+            About Me
+          </a>
         </div>
       )}
 
       <a
         href="#about"
-        className="relative z-10 absolute bottom-8 left-1/2 -translate-x-1/2 text-muted animate-bounce"
+        className="absolute z-10 bottom-8 left-1/2 -translate-x-1/2 text-muted animate-bounce"
         aria-label="Scroll down"
       >
         <ChevronDown size={24} />

@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navItems = [
@@ -9,8 +12,26 @@ const navItems = [
 ];
 
 export default function Nav() {
+  const [heroVisible, setHeroVisible] = useState(true)
+
+  useEffect(() => {
+    const hero = document.getElementById('hero')
+    if (!hero) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroVisible(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 bg-background border-b border-border transition-transform duration-300 ${
+        heroVisible ? '-translate-y-full' : 'translate-y-0'
+      }`}
+    >
       <div className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
         <a href="#hero" className="font-mono text-xs tracking-widest uppercase text-foreground">
           Portfolio
