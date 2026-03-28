@@ -29,7 +29,7 @@ export function ImageSlider({ images, positions, alt = 'Profile' }: ImageSliderP
   return (
     <div className="relative flex flex-col items-center">
       {/* 3D Carousel */}
-      <div className="relative w-64 h-64 flex items-center justify-center">
+      <div className="relative w-48 h-72 md:w-56 md:h-80 flex items-center justify-center">
         <div className="relative w-full h-full flex items-center justify-center [perspective:1000px]">
           {images.map((src, index) => {
             const offset = index - current
@@ -47,7 +47,7 @@ export function ImageSlider({ images, positions, alt = 'Profile' }: ImageSliderP
             return (
               <div
                 key={index}
-                className="absolute w-64 h-64 transition-all duration-500 ease-in-out flex items-center justify-center"
+                className="absolute w-48 h-72 md:w-56 md:h-80 transition-all duration-500 ease-in-out flex items-center justify-center"
                 style={{
                   transform: `translateX(${pos * 45}%) scale(${isCenter ? 1 : isAdjacent ? 0.85 : 0.7}) rotateY(${pos * -10}deg)`,
                   zIndex: isCenter ? 10 : isAdjacent ? 5 : 1,
@@ -59,7 +59,7 @@ export function ImageSlider({ images, positions, alt = 'Profile' }: ImageSliderP
                 <img
                   src={src}
                   alt={`${alt} ${index + 1}`}
-                  className="object-cover w-full h-full rounded-full border-2 border-foreground/10 shadow-2xl"
+                  className="object-cover w-full h-full rounded-3xl border-2 border-foreground/10 shadow-2xl"
                   style={{ objectPosition }}
                 />
               </div>

@@ -40,7 +40,7 @@ export default function About() {
         </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-12">
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-64 h-64 rounded-full bg-muted/20 animate-pulse" />
+            <div className="w-48 h-72 md:w-56 md:h-80 rounded-3xl bg-muted/20 animate-pulse" />
             <div className="mt-6 w-full space-y-2">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-14 w-full bg-muted/20 rounded-lg animate-pulse" />
