@@ -64,6 +64,17 @@ export interface Education {
   updatedAt: string
 }
 
+export interface Section {
+  id: string
+  key: string
+  title: string
+  navTitle: string
+  order: number
+  visible: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Contact {
   id: string
   type: string

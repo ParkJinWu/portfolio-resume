@@ -21,8 +21,9 @@ interface SortableListProps<T extends { id: string }> {
   items: T[]
   onReorder: (items: T[]) => void
   renderItem: (item: T) => React.ReactNode
-  onEdit: (item: T) => void
-  onDelete: (item: T) => void
+  onEdit?: (item: T) => void
+  onDelete?: (item: T) => void
+  renderActions?: (item: T) => React.ReactNode
 }
 
 export function SortableList<T extends { id: string }>({
@@ -31,6 +32,7 @@ export function SortableList<T extends { id: string }>({
   renderItem,
   onEdit,
   onDelete,
+  renderActions,
 }: SortableListProps<T>) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -61,8 +63,9 @@ export function SortableList<T extends { id: string }>({
             <SortableItem
               key={item.id}
               id={item.id}
-              onEdit={() => onEdit(item)}
-              onDelete={() => onDelete(item)}
+              onEdit={onEdit ? () => onEdit(item) : undefined}
+              onDelete={onDelete ? () => onDelete(item) : undefined}
+              actions={renderActions ? renderActions(item) : undefined}
             >
               {renderItem(item)}
             </SortableItem>

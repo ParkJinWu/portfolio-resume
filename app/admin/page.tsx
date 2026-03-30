@@ -1,9 +1,11 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiFetch } from '@/lib/api'
-import type { About, Experience, Project, Skill, Education, Contact } from '@/lib/types'
+import type { About, Experience, Project, Skill, Education, Contact, Section } from '@/lib/types'
+import { SortableList } from '@/components/admin/SortableList'
 import {
   User,
   Briefcase,
@@ -11,18 +13,45 @@ import {
   Wrench,
   GraduationCap,
   Mail,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  Undo2,
+  Save,
+  type LucideIcon,
 } from 'lucide-react'
 
-const SECTIONS = [
-  { key: 'about', label: '소개', href: '/admin/about', icon: User },
-  { key: 'experience', label: '경력', href: '/admin/experience', icon: Briefcase },
-  { key: 'projects', label: '프로젝트', href: '/admin/projects', icon: FolderOpen },
-  { key: 'skills', label: '기술', href: '/admin/skills', icon: Wrench },
-  { key: 'education', label: '학력', href: '/admin/education', icon: GraduationCap },
-  { key: 'contact', label: '연락처', href: '/admin/contact', icon: Mail },
-] as const
+const SECTION_META: Record<string, { icon: LucideIcon; href: string }> = {
+  about:      { icon: User,          href: '/admin/about' },
+  experience: { icon: Briefcase,     href: '/admin/experience' },
+  projects:   { icon: FolderOpen,    href: '/admin/projects' },
+  skills:     { icon: Wrench,        href: '/admin/skills' },
+  education:  { icon: GraduationCap, href: '/admin/education' },
+  contact:    { icon: Mail,          href: '/admin/contact' },
+}
 
 export default function AdminDashboard() {
+  const qc = useQueryClient()
+
+  const { data: sections = [] } = useQuery<Section[]>({
+    queryKey: ['sections'],
+    queryFn: () => apiFetch<Section[]>('/api/sections'),
+  })
+
+  const [localSections, setLocalSections] = useState<Section[]>([])
+
+  useEffect(() => {
+    if (sections.length > 0) {
+      setLocalSections(sections)
+    }
+  }, [sections])
+
+  const isDirty = JSON.stringify(
+    localSections.map((s) => ({ id: s.id, order: s.order, visible: s.visible }))
+  ) !== JSON.stringify(
+    sections.map((s) => ({ id: s.id, order: s.order, visible: s.visible }))
+  )
+
   const about = useQuery({ queryKey: ['about'], queryFn: () => apiFetch<About | null>('/api/about') })
   const experience = useQuery({ queryKey: ['experience'], queryFn: () => apiFetch<Experience[]>('/api/experience') })
   const projects = useQuery({ queryKey: ['projects'], queryFn: () => apiFetch<Project[]>('/api/projects') })
@@ -39,27 +68,115 @@ export default function AdminDashboard() {
     contact: contact.data ? `${contact.data.length}개` : '-',
   }
 
+  const updateMutation = useMutation({
+    mutationFn: (items: Array<{ id: string; order: number; visible: boolean }>) =>
+      apiFetch<Section[]>('/api/sections', {
+        method: 'PUT',
+        body: JSON.stringify({ sections: items }),
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['sections'] }),
+  })
+
+  const handleReorder = (reordered: Section[]) => {
+    setLocalSections(reordered.map((s, i) => ({ ...s, order: i })))
+  }
+
+  const handleToggleVisible = (section: Section) => {
+    setLocalSections((prev) =>
+      prev.map((s) => (s.id === section.id ? { ...s, visible: !s.visible } : s))
+    )
+  }
+
+  const handleSave = () => {
+    const payload = localSections.map((s, i) => ({
+      id: s.id,
+      order: i,
+      visible: s.visible,
+    }))
+    updateMutation.mutate(payload)
+  }
+
+  const handleReset = () => {
+    setLocalSections(sections)
+  }
+
   return (
     <div>
       <h1 className="mb-6 text-2xl font-bold text-foreground">대시보드</h1>
 
-      <div className="grid grid-cols-3 gap-4">
-        {SECTIONS.map(({ key, label, href, icon: Icon }) => (
-          <Link
-            key={key}
-            href={href}
-            className="flex items-center gap-4 rounded-xl border border-border bg-background p-5 transition-colors hover:bg-surface"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/5">
-              <Icon size={20} className="text-foreground" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-foreground">{label}</p>
-              <p className="text-xs text-muted">{counts[key]}</p>
-            </div>
-          </Link>
-        ))}
+      <div className="space-y-2">
+        <SortableList
+          items={localSections}
+          onReorder={handleReorder}
+          renderItem={(section) => {
+            const meta = SECTION_META[section.key]
+            const Icon = meta?.icon
+            return (
+              <div className="flex items-center gap-3">
+                {Icon && (
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-foreground/5">
+                    <Icon size={16} className="text-foreground" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className={`text-sm font-medium ${section.visible ? 'text-foreground' : 'text-muted line-through'}`}>
+                    {section.title}
+                  </p>
+                  <p className="text-xs text-muted">{counts[section.key] ?? '-'}</p>
+                </div>
+              </div>
+            )
+          }}
+          renderActions={(section) => {
+            const meta = SECTION_META[section.key]
+            return (
+              <>
+                <button
+                  onClick={() => handleToggleVisible(section)}
+                  className="rounded-lg p-1.5 text-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
+                  title={section.visible ? '숨기기' : '표시하기'}
+                >
+                  {section.visible ? <Eye size={16} /> : <EyeOff size={16} />}
+                </button>
+                {meta && (
+                  <Link
+                    href={meta.href}
+                    className="rounded-lg p-1.5 text-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
+                    title="관리"
+                  >
+                    <ExternalLink size={16} />
+                  </Link>
+                )}
+              </>
+            )
+          }}
+        />
       </div>
+
+      {isDirty && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background px-6 py-3">
+          <div className="mx-auto flex max-w-2xl items-center justify-between">
+            <p className="text-sm text-muted">변경사항이 있습니다</p>
+            <div className="flex gap-2">
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground"
+              >
+                <Undo2 size={14} />
+                되돌리기
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={updateMutation.isPending}
+                className="flex items-center gap-1.5 rounded-lg bg-foreground px-3 py-1.5 text-sm text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                <Save size={14} />
+                {updateMutation.isPending ? '저장 중...' : '저장'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

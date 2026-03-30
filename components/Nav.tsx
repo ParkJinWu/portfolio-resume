@@ -1,18 +1,27 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { apiFetch } from '@/lib/api'
+import type { Section } from '@/lib/types'
 import ThemeToggle from "@/components/ThemeToggle";
 
-const navItems = [
-  "About",
-  "Experience",
-  "Skills",
-  "Projects",
-  "Education",
-];
+const DEFAULT_NAV = ["About", "Experience", "Skills", "Projects", "Education"];
 
 export default function Nav() {
   const [heroVisible, setHeroVisible] = useState(true)
+
+  const { data: sections } = useQuery<Section[]>({
+    queryKey: ['sections'],
+    queryFn: () => apiFetch<Section[]>('/api/sections'),
+  })
+
+  const navItems = sections
+    ? sections
+        .filter((s) => s.visible)
+        .sort((a, b) => a.order - b.order)
+        .map((s) => s.navTitle)
+    : DEFAULT_NAV
 
   useEffect(() => {
     const hero = document.getElementById('hero')

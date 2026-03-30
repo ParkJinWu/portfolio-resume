@@ -89,6 +89,20 @@ model Education {
   @@map("educations")
 }
 
+// ─── Section ─────────────────────────────────────────────────────────────────
+model Section {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String
+  navTitle  String   @map("nav_title")
+  order     Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("sections")
+}
+
 // ─── Contact ─────────────────────────────────────────────────────────────────
 model Contact {
   id        String   @id @default(cuid())

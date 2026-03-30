@@ -7,11 +7,12 @@ import { GripVertical, Pencil, Trash2 } from 'lucide-react'
 interface SortableItemProps {
   id: string
   children: React.ReactNode
-  onEdit: () => void
-  onDelete: () => void
+  onEdit?: () => void
+  onDelete?: () => void
+  actions?: React.ReactNode
 }
 
-export function SortableItem({ id, children, onEdit, onDelete }: SortableItemProps) {
+export function SortableItem({ id, children, onEdit, onDelete, actions }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -45,18 +46,26 @@ export function SortableItem({ id, children, onEdit, onDelete }: SortableItemPro
       <div className="min-w-0 flex-1">{children}</div>
 
       <div className="flex shrink-0 gap-1">
-        <button
-          onClick={onEdit}
-          className="rounded-lg p-1.5 text-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
-        >
-          <Pencil size={16} />
-        </button>
-        <button
-          onClick={onDelete}
-          className="rounded-lg p-1.5 text-muted transition-colors hover:bg-red-50 hover:text-red-500"
-        >
-          <Trash2 size={16} />
-        </button>
+        {actions ?? (
+          <>
+            {onEdit && (
+              <button
+                onClick={onEdit}
+                className="rounded-lg p-1.5 text-muted transition-colors hover:bg-foreground/5 hover:text-foreground"
+              >
+                <Pencil size={16} />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={onDelete}
+                className="rounded-lg p-1.5 text-muted transition-colors hover:bg-red-50 hover:text-red-500"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
+          </>
+        )}
       </div>
     </div>
   )
