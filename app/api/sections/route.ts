@@ -34,11 +34,15 @@ export async function PUT(req: NextRequest) {
   try {
     const body = await req.json()
     const { sections } = body as {
-      sections: Array<{ id: string; order: number; visible: boolean }>
+      sections: Array<{ id: string; order: number; visible: boolean; title: string; navTitle: string }>
     }
 
     if (!Array.isArray(sections)) {
       return Response.json({ error: 'sections 배열이 필요합니다' }, { status: 400 })
+    }
+
+    if (sections.some((s) => !s.title?.trim() || !s.navTitle?.trim())) {
+      return Response.json({ error: 'title과 navTitle은 비워둘 수 없습니다' }, { status: 400 })
     }
 
     // default- ID는 마이그레이션 전 fallback 데이터 → DB 업데이트 불가
@@ -46,7 +50,7 @@ export async function PUT(req: NextRequest) {
     if (isDefault) {
       const merged = DEFAULT_SECTIONS.map((d) => {
         const match = sections.find((s) => s.id === d.id)
-        return match ? { ...d, order: match.order, visible: match.visible } : d
+        return match ? { ...d, order: match.order, visible: match.visible, title: match.title, navTitle: match.navTitle } : d
       }).sort((a, b) => a.order - b.order)
       return Response.json({ data: merged }, { status: 200 })
     }
@@ -55,7 +59,7 @@ export async function PUT(req: NextRequest) {
       sections.map((s) =>
         prisma.section.update({
           where: { id: s.id },
-          data: { order: s.order, visible: s.visible },
+          data: { order: s.order, visible: s.visible, title: s.title, navTitle: s.navTitle },
         }),
       ),
     )

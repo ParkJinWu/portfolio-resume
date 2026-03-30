@@ -47,9 +47,9 @@ export default function AdminDashboard() {
   }, [sections])
 
   const isDirty = JSON.stringify(
-    localSections.map((s) => ({ id: s.id, order: s.order, visible: s.visible }))
+    localSections.map((s) => ({ id: s.id, order: s.order, visible: s.visible, title: s.title, navTitle: s.navTitle }))
   ) !== JSON.stringify(
-    sections.map((s) => ({ id: s.id, order: s.order, visible: s.visible }))
+    sections.map((s) => ({ id: s.id, order: s.order, visible: s.visible, title: s.title, navTitle: s.navTitle }))
   )
 
   const about = useQuery({ queryKey: ['about'], queryFn: () => apiFetch<About | null>('/api/about') })
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   }
 
   const updateMutation = useMutation({
-    mutationFn: (items: Array<{ id: string; order: number; visible: boolean }>) =>
+    mutationFn: (items: Array<{ id: string; order: number; visible: boolean; title: string; navTitle: string }>) =>
       apiFetch<Section[]>('/api/sections', {
         method: 'PUT',
         body: JSON.stringify({ sections: items }),
@@ -79,6 +79,12 @@ export default function AdminDashboard() {
 
   const handleReorder = (reordered: Section[]) => {
     setLocalSections(reordered.map((s, i) => ({ ...s, order: i })))
+  }
+
+  const handleFieldChange = (id: string, field: 'title' | 'navTitle', value: string) => {
+    setLocalSections((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    )
   }
 
   const handleToggleVisible = (section: Section) => {
@@ -92,6 +98,8 @@ export default function AdminDashboard() {
       id: s.id,
       order: i,
       visible: s.visible,
+      title: s.title,
+      navTitle: s.navTitle,
     }))
     updateMutation.mutate(payload)
   }
@@ -118,11 +126,32 @@ export default function AdminDashboard() {
                     <Icon size={16} className="text-foreground" />
                   </div>
                 )}
-                <div className="min-w-0">
-                  <p className={`text-sm font-medium ${section.visible ? 'text-foreground' : 'text-muted line-through'}`}>
-                    {section.title}
-                  </p>
-                  <p className="text-xs text-muted">{counts[section.key] ?? '-'}</p>
+                <div className="min-w-0 flex-1">
+                  <p className={`text-xs text-muted mb-1 ${!section.visible && 'line-through'}`}>{section.key}</p>
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        value={section.title}
+                        onChange={(e) => handleFieldChange(section.id, 'title', e.target.value)}
+                        className="w-24 bg-transparent text-sm font-medium text-foreground outline-none border-b border-transparent focus:border-foreground/30"
+                        placeholder="제목"
+                      />
+                      <p className="text-[10px] text-muted/40 mt-0.5">섹션 제목</p>
+                    </div>
+                    <span className="text-muted/30">/</span>
+                    <div>
+                      <input
+                        type="text"
+                        value={section.navTitle}
+                        onChange={(e) => handleFieldChange(section.id, 'navTitle', e.target.value)}
+                        className="w-24 bg-transparent text-sm text-muted outline-none border-b border-transparent focus:border-foreground/30"
+                        placeholder="Nav"
+                      />
+                      <p className="text-[10px] text-muted/40 mt-0.5">Nav 표시명</p>
+                    </div>
+                    <span className="text-xs text-muted ml-auto">{counts[section.key] ?? '-'}</span>
+                  </div>
                 </div>
               </div>
             )

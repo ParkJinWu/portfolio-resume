@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { apiFetch } from '@/lib/api'
 import type { Skill } from '@/lib/types'
 
-export default function Skills() {
+export default function Skills({ title = 'Skills' }: { title?: string }) {
   const { data, isLoading } = useQuery({
     queryKey: ['skills'],
     queryFn: () => apiFetch<Skill[]>('/api/skills'),
@@ -17,7 +17,7 @@ export default function Skills() {
         className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
       >
         <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-          Skills
+          {title}
         </p>
         <div className="flex flex-wrap gap-2">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -43,7 +43,7 @@ export default function Skills() {
       className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
     >
       <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-        Skills
+        {title}
       </p>
       <div className="space-y-6">
         {Object.entries(grouped).map(([category, skills]) => (

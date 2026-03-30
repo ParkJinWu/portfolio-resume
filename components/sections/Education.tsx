@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { apiFetch } from '@/lib/api'
 import type { Education } from '@/lib/types'
 
-export default function Education() {
+export default function Education({ title = 'Education' }: { title?: string }) {
   const { data, isLoading } = useQuery({
     queryKey: ['education'],
     queryFn: () => apiFetch<Education[]>('/api/education'),
@@ -17,7 +17,7 @@ export default function Education() {
         className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
       >
         <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-          Education
+          {title}
         </p>
         <div className="space-y-4">
           {[1, 2].map((i) => (
@@ -39,7 +39,7 @@ export default function Education() {
       className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
     >
       <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-        Education
+        {title}
       </p>
       <div className="space-y-8">
         {data.map((edu) => (

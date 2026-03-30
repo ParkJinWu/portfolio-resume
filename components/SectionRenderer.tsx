@@ -10,7 +10,7 @@ import Skills from '@/components/sections/Skills'
 import Projects from '@/components/sections/Projects'
 import Education from '@/components/sections/Education'
 
-const SECTION_COMPONENTS: Record<string, ComponentType> = {
+const SECTION_COMPONENTS: Record<string, ComponentType<{ title?: string }>> = {
   about: About,
   experience: Experience,
   skills: Skills,
@@ -35,7 +35,7 @@ export function SectionRenderer() {
       {visibleSections.map((section) => {
         const Component = SECTION_COMPONENTS[section.key]
         if (!Component) return null
-        return <Component key={section.key} />
+        return <Component key={section.key} title={section.title} />
       })}
     </>
   )

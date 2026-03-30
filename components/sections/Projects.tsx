@@ -5,7 +5,7 @@ import { apiFetch } from '@/lib/api'
 import type { Project } from '@/lib/types'
 import { ExternalLink, GitFork } from 'lucide-react'
 
-export default function Projects() {
+export default function Projects({ title = 'Projects' }: { title?: string }) {
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: () => apiFetch<Project[]>('/api/projects'),
@@ -18,7 +18,7 @@ export default function Projects() {
         className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
       >
         <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-          Projects
+          {title}
         </p>
         <div className="space-y-6">
           {[1, 2].map((i) => (
@@ -41,7 +41,7 @@ export default function Projects() {
       className="max-w-2xl mx-auto px-6 py-16 border-b border-dashed border-border"
     >
       <p className="font-mono text-xs uppercase tracking-widest text-muted mb-8">
-        Projects
+        {title}
       </p>
       <div className="space-y-10">
         {data.map((project) => (

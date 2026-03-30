@@ -6,7 +6,13 @@ import { apiFetch } from '@/lib/api'
 import type { Section } from '@/lib/types'
 import ThemeToggle from "@/components/ThemeToggle";
 
-const DEFAULT_NAV = ["About", "Experience", "Skills", "Projects", "Education"];
+const DEFAULT_NAV = [
+  { key: 'about', navTitle: 'About' },
+  { key: 'experience', navTitle: 'Experience' },
+  { key: 'skills', navTitle: 'Skills' },
+  { key: 'projects', navTitle: 'Projects' },
+  { key: 'education', navTitle: 'Education' },
+]
 
 export default function Nav() {
   const [heroVisible, setHeroVisible] = useState(true)
@@ -20,7 +26,7 @@ export default function Nav() {
     ? sections
         .filter((s) => s.visible)
         .sort((a, b) => a.order - b.order)
-        .map((s) => s.navTitle)
+        .map((s) => ({ key: s.key, navTitle: s.navTitle }))
     : DEFAULT_NAV
 
   useEffect(() => {
@@ -49,11 +55,11 @@ export default function Nav() {
           <nav className="flex gap-6">
             {navItems.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.key}
+                href={`#${item.key}`}
                 className="text-xs text-muted hover:text-foreground transition-colors font-mono uppercase tracking-wider"
               >
-                {item}
+                {item.navTitle}
               </a>
             ))}
           </nav>
