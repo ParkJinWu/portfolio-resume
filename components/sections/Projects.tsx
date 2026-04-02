@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { apiFetch } from '@/lib/api'
 import type { Project } from '@/lib/types'
 import { ExternalLink, GitFork } from 'lucide-react'
+import Image from 'next/image'
 
 export default function Projects({ title = 'Projects' }: { title?: string }) {
   const { data, isLoading } = useQuery({
@@ -89,10 +90,22 @@ export default function Projects({ title = 'Projects' }: { title?: string }) {
               </div>
             )}
 
-            {/* 설명 */}
-            <p className="text-sm text-muted/80 whitespace-pre-line leading-relaxed mb-5">
-              {project.description}
-            </p>
+            {/* 이미지(왼쪽) + 설명(오른쪽) */}
+            <div className={`flex ${project.imageUrl ? 'flex-col md:flex-row gap-5' : ''} mb-5`}>
+              {project.imageUrl && (
+                <div className="relative w-full md:w-40 shrink-0 aspect-video md:aspect-square rounded-lg overflow-hidden">
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <p className="text-sm text-muted/80 whitespace-pre-line leading-relaxed flex-1">
+                {project.description}
+              </p>
+            </div>
 
             {/* 기술 스택 */}
             {project.tags.length > 0 && (
